@@ -3,6 +3,7 @@
 namespace Collective\Html;
 
 use Illuminate\Contracts\Support\DeferrableProvider;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\View\Compilers\BladeCompiler;
@@ -54,9 +55,9 @@ class HtmlServiceProvider extends ServiceProvider implements DeferrableProvider
     protected function registerFormBuilder()
     {
         $this->app->singleton('form', function ($app) {
-            $form = new FormBuilder($app['html'], $app['url'], $app['view'], $app['session.store']->token(), $app['request']);
+            $form = new FormBuilder($app['html'], $app['url'], $app['view'], Session::getFacadeRoot()->token(), $app['request']);
 
-            return $form->setSessionStore($app['session.store']);
+            return $form->setSessionStore(Session::getFacadeRoot());
         });
     }
 
